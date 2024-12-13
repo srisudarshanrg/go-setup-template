@@ -22,6 +22,7 @@ func SessionAccessHandlers(sessionAccess *scs.SessionManager) {
 	session = sessionAccess
 }
 
+// Home is the handler for the home page
 func Home(w http.ResponseWriter, r *http.Request) {
 	err := RenderTemplate(w, "home.page.tmpl", models.TemplateData{})
 	if err != nil {

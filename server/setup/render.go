@@ -8,6 +8,7 @@ import (
 	"github.com/srisudarshanrg/go-setup-template/server/models"
 )
 
+// RenderTemplate parses and executes a template
 func RenderTemplate(w http.ResponseWriter, tmpl string, templateData models.TemplateData) error {
 	template, err := template.ParseFiles("./templates/"+tmpl, "./templates/base.layout.tmpl")
 	if err != nil {
