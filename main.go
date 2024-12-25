@@ -7,11 +7,12 @@ import (
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/go-chi/chi"
-	"github.com/srisudarshanrg/go-setup-template/server/config"
-	"github.com/srisudarshanrg/go-setup-template/server/database"
-	"github.com/srisudarshanrg/go-setup-template/server/functions"
-	"github.com/srisudarshanrg/go-setup-template/server/setup"
-	"github.com/srisudarshanrg/go-setup-template/server/validations"
+	"github.com/srisudarshanrg/go-handlers-template/server/config"
+	"github.com/srisudarshanrg/go-handlers-template/server/database"
+	"github.com/srisudarshanrg/go-handlers-template/server/functions"
+	"github.com/srisudarshanrg/go-handlers-template/server/handlers"
+	"github.com/srisudarshanrg/go-handlers-template/server/render"
+	"github.com/srisudarshanrg/go-handlers-template/server/validations"
 )
 
 const portNumber = ":{put_your_port_number_here}"
@@ -27,20 +28,20 @@ func main() {
 	session.Cookie.SameSite = http.SameSiteLaxMode
 	session.Cookie.Secure = false
 
-	// database setup
+	// database handlers
 	db, err := database.CreateDatabaseConn()
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
-	// template cache setup
-	templateCache, err := setup.CreateTemplateCache()
+	// template cache handlers
+	templateCache, err := render.CreateTemplateCache()
 	if err != nil {
 		log.Fatal("Could not create template cache: ", err)
 	}
 
-	// app config setup
+	// app config handlers
 	appConfig.TemplateCache = templateCache
 	appConfig.ProjectCompleted = false
 	appConfig.UseTemplateCache = appConfig.ProjectCompleted
@@ -48,10 +49,10 @@ func main() {
 	appConfig.Session = session
 
 	// handlers repository
-	handlerRepo := setup.HandlerRepository{
+	handlerRepo := handlers.HandlerRepository{
 		AppConfig: appConfig,
 	}
-	setup.RepositoryAccessSetup(handlerRepo)
+	handlers.RepositoryAccesshandlers(handlerRepo)
 
 	// app config access
 	functions.AppConfigAccessFunctions(appConfig)
@@ -72,7 +73,7 @@ func routes() http.Handler {
 
 	mux.Use(SessionLoadAndSave)
 
-	mux.Get("/", setup.AppConfig.Home)
+	mux.Get("/", handlers.AppConfig.Home)
 
 	fileServer := http.FileServer(http.Dir("./static/"))
 	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))

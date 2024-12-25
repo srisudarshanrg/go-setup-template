@@ -1,4 +1,4 @@
-module github.com/srisudarshanrg/go-setup-template
+module github.com/srisudarshanrg/go-handlers-template
 
 go 1.23.1
 
