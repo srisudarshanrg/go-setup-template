@@ -7,6 +7,7 @@ import (
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/go-chi/chi"
+	"github.com/srisudarshanrg/go-setup-template/server/config"
 	"github.com/srisudarshanrg/go-setup-template/server/database"
 	"github.com/srisudarshanrg/go-setup-template/server/functions"
 	"github.com/srisudarshanrg/go-setup-template/server/setup"
@@ -16,6 +17,7 @@ import (
 const portNumber = ":{put_your_port_number_here}"
 
 var session *scs.SessionManager
+var appConfig config.AppConfig
 
 func main() {
 	// session
@@ -32,11 +34,28 @@ func main() {
 	}
 	defer db.Close()
 
-	// database and access
-	setup.DBAccessHandlers(db)
-	setup.SessionAccessHandlers(session)
-	functions.DBAccessFunctions(db)
-	validations.DBAccessFormValidations(db)
+	// template cache setup
+	templateCache, err := setup.CreateTemplateCache()
+	if err != nil {
+		log.Fatal("Could not create template cache: ", err)
+	}
+
+	// app config setup
+	appConfig.TemplateCache = templateCache
+	appConfig.ProjectCompleted = false
+	appConfig.UseTemplateCache = appConfig.ProjectCompleted
+	appConfig.Database = db
+	appConfig.Session = session
+
+	// handlers repository
+	handlerRepo := setup.HandlerRepository{
+		AppConfig: appConfig,
+	}
+	setup.RepositoryAccessSetup(handlerRepo)
+
+	// app config access
+	functions.AppConfigAccessFunctions(appConfig)
+	validations.AppConfigAccessValidations(appConfig)
 
 	// routes
 	server := http.Server{
@@ -53,7 +72,7 @@ func routes() http.Handler {
 
 	mux.Use(SessionLoadAndSave)
 
-	mux.Get("/", setup.Home)
+	mux.Get("/", setup.AppConfig.Home)
 
 	fileServer := http.FileServer(http.Dir("./static/"))
 	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
