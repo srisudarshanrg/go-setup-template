@@ -1,6 +1,6 @@
 package functions
 
-import "github.com/srisudarshanrg/go-handlers-template/server/config"
+import "github.com/srisudarshanrg/go-setup-template/server/config"
 
 var appConfig config.AppConfig
 
