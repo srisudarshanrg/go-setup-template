@@ -17,6 +17,7 @@ func AppConfigAccessRender(a config.AppConfig) {
 	appConfig = a
 }
 
+// RenderTemplate executes a template from the template cache based on the passed template name
 func RenderTemplate(w http.ResponseWriter, tmpl string, templateData models.TemplateData) error {
 	var templateCache map[string]*template.Template
 	var err error
@@ -43,6 +44,7 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, templateData models.Temp
 	return nil
 }
 
+// CreateTemplateCache creates a template cache with all the templates and layouts
 func CreateTemplateCache() (map[string]*template.Template, error) {
 	templateCache := map[string]*template.Template{}
 

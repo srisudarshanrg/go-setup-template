@@ -7,6 +7,7 @@ import (
 	"github.com/alexedwards/scs/v2"
 )
 
+// AppConfig contains everything needed by the application sitewide
 type AppConfig struct {
 	TemplateCache    map[string]*template.Template
 	UseTemplateCache bool
