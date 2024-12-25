@@ -1,5 +1,5 @@
 # go-handlers-template
-This is a handlers template for a Go project
+This is a setup template for a Go project
 
 ## Problem
 Everytime I start doing a project in Go, it takes a significant amount of time to handlers the entire project. So, I am not able to concentrate on doing the project itself.
