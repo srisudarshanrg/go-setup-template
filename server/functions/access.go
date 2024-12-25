@@ -8,3 +8,5 @@ var appConfig config.AppConfig
 func AppConfigAccessFunctions(a config.AppConfig) {
 	appConfig = a
 }
+
+var db = appConfig.Database

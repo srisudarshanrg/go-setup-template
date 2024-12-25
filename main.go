@@ -71,10 +71,15 @@ func main() {
 func routes() http.Handler {
 	mux := chi.NewRouter()
 
+	// middleware
 	mux.Use(SessionLoadAndSave)
 
-	mux.Get("/", handlers.AppConfig.Home)
+	// routes for get requests
+	mux.Get("/", handlers.Repository.Home)
 
+	// routes for post requests
+
+	// routes for static files
 	fileServer := http.FileServer(http.Dir("./static/"))
 	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
 

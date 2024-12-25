@@ -44,7 +44,7 @@ func PasswordEqualConfirmPassword(password string, confirmPassword string) {
 // UserExists checks if a user already exists with same username in database
 func UsernameExists(username string) {
 	query := `select * from users where username=$1`
-	results, err := appConfig.Database.Exec(query, username)
+	results, err := db.Exec(query, username)
 	if err != nil {
 		errorString := "Could not check database to validate unique username."
 		errorList = append(errorList, errorString)
@@ -65,7 +65,7 @@ func UsernameExists(username string) {
 // EmailExists checks if a user already exists with same email or email in database
 func EmailExists(email string) {
 	query := `select * from users where email=$1`
-	results, err := appConfig.Database.Exec(query, email)
+	results, err := db.Exec(query, email)
 	exists, _ := results.RowsAffected()
 
 	if err != nil {

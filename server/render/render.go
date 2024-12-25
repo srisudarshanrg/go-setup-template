@@ -55,7 +55,7 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 
 	for _, file := range files {
 		templateName := filepath.Base(file)
-		templateSet, err := template.New(templateName).ParseFiles()
+		templateSet, err := template.New(templateName).ParseFiles(file)
 		if err != nil {
 			return templateCache, err
 		}
