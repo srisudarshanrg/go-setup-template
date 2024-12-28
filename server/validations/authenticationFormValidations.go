@@ -1,6 +1,7 @@
 package validations
 
 import (
+	"context"
 	"log"
 	"strconv"
 
@@ -81,6 +82,7 @@ func EmailExists(email string) {
 }
 
 // GetErrorList passes the error list to the final validation
-func GetErrorList() []string {
-	return errorList
+func PutErrorListInSession(ctx context.Context) {
+	session.Put(ctx, "errorList", errorList)
+	errorList = nil
 }

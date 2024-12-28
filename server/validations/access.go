@@ -10,3 +10,4 @@ func AppConfigAccessValidations(a config.AppConfig) {
 }
 
 var db = appConfig.Database
+var session = appConfig.Session
