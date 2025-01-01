@@ -2,9 +2,11 @@ package validations
 
 import (
 	"context"
+	"database/sql"
 	"log"
 	"strconv"
 
+	"github.com/alexedwards/scs/v2"
 	"github.com/asaskevich/govalidator"
 )
 
@@ -43,7 +45,7 @@ func PasswordEqualConfirmPassword(password string, confirmPassword string) {
 }
 
 // UserExists checks if a user already exists with same username in database
-func UsernameExists(username string) {
+func UsernameExists(db *sql.DB, username string) {
 	query := `select * from users where username=$1`
 	results, err := db.Exec(query, username)
 	if err != nil {
@@ -64,7 +66,7 @@ func UsernameExists(username string) {
 }
 
 // EmailExists checks if a user already exists with same email or email in database
-func EmailExists(email string) {
+func EmailExists(db *sql.DB, email string) {
 	query := `select * from users where email=$1`
 	results, err := db.Exec(query, email)
 	exists, _ := results.RowsAffected()
@@ -82,7 +84,7 @@ func EmailExists(email string) {
 }
 
 // GetErrorList passes the error list to the final validation
-func PutErrorListInSession(ctx context.Context) {
+func PutErrorListInSession(session *scs.SessionManager, ctx context.Context) {
 	session.Put(ctx, "errorList", errorList)
 	errorList = nil
 }
